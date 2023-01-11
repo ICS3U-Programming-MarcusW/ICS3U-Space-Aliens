@@ -4,8 +4,9 @@
 # It uses the ugame and stage libraries to manage the graphics
 # and input for the game.
 
-import ugame
+
 import stage
+import ugame
 
 
 def game_scene():
