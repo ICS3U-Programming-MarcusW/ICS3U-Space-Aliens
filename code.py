@@ -12,8 +12,7 @@ def game_scene():
     # This function sets up and runs the main game scene.
 
     # Load the background and sprite image banks
-    image_bank_background = stage.Bank.from_bmp16
-    ("space_aliens_background.bmp")
+    image_bank_background = stage.Bank.from_bmp16("space_aliens_background.bmp")
     image_bank_sprites = stage.Bank.from_bmp16("space_aliens.bmp")
 
     # Create the background grid using the image and set the size to 10x8 tiles
