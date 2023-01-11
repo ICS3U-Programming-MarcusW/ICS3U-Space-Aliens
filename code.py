@@ -33,11 +33,19 @@ def game_scene():
     game.render_block()
 
     # Game Loop
-    while True:
-        # Redraw the sprites on the screen
-        game.render_sprites([ship])
-        # Pause the loop to achieve 60fps frame rate
-        game.tick()
+    # while True:
+    #     # Get user input
+    #      keys = ugame.buttons.get_pressed()
+
+    #      if keys &
+
+    #     # update game logic
+
+    #     # Redraw the sprites on the screen
+    #     game.render_sprites([ship])
+
+    #     # Pause the loop to achieve 60fps frame rate
+    #     game.tick()
 
 
 if __name__ == "__main__":
