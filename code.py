@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+# Created by: Marcus Wehbi
 # This program is the "Space Aliens" game for the PyBadge.
 # It uses the ugame and stage libraries to manage the graphics
 # and input for the game.
@@ -33,20 +34,58 @@ def game_scene():
     # Draw the background on the screen
     game.render_block()
 
-    # Game Loop
-    # while True:
-    #     # Get user input
-    #      keys = ugame.buttons.get_pressed()
+    # Game Loop to repeat forever
+    while True:
+        # Get user input
+        keys = ugame.buttons.get_pressed()
 
-    #      if keys &
+        # Check if the "A" button is pressed
+        if keys & ugame.K_X:
+            print("Button A pressed")
+            # Perform action for "A" button press
 
-    #     # update game logic
+        # Check if the "B" button is pressed
+        if keys & ugame.K_O:
+            print("Button B pressed")
+            # Perform action for "B" button press
 
-    #     # Redraw the sprites on the screen
-    #     game.render_sprites([ship])
+        # Check if the "Start" button is pressed
+        if keys & ugame.K_START:
+            print("Start button pressed")
+            # Perform action for "Start" button press
 
-    #     # Pause the loop to achieve 60fps frame rate
-    #     game.tick()
+        # Check if the "Select" button is pressed
+        if keys & ugame.K_SELECT:
+            print("Select button pressed")
+            # Perform action for "Select" button press
+
+        # Check if the "Right" button is pressed
+        if keys & ugame.K_RIGHT:
+            # Move the ship to the right
+            ship.move(ship.x + 1, ship.y)
+
+        # Check if the "Left" button is pressed
+        if keys & ugame.K_LEFT:
+            # Move the ship to the left
+            ship.move(ship.x - 1, ship.y)
+
+        # Check if the "Up" button is pressed
+        if keys & ugame.K_UP:
+            # Move the ship up
+            ship.move(ship.x, ship.y - 1)
+
+        # Check if the "Down" button is pressed
+        if keys & ugame.K_DOWN:
+            # Move the ship down
+            ship.move(ship.x, ship.y + 1)
+
+        # update game logic
+
+        # Redraw the sprites on the screen
+        game.render_sprites([ship])
+
+        # Pause the loop to achieve 60fps frame rate
+        game.tick()
 
 
 if __name__ == "__main__":
