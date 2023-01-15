@@ -13,6 +13,69 @@ import ugame
 import constants
 
 
+def menu_scene():
+    # This function sets up and runs the main game scene.
+
+    # Load the background and sprite image banks
+    image_bank_background = stage.Bank.from_bmp16("space_aliens_background.bmp")
+
+    # Add text objects
+    text = []
+    # Create a Text object with a width of 29, height of 12, no font, and the red palette
+    text1 = stage.Text(
+        width=29,
+        height=12,
+        font=None,
+        palette=constants.RED_PALETTE,
+        buffer=None,
+    )
+    # Move the text to the position (20, 10)
+    text1.move(20, 10)
+    # Set the text to "MT Game Studio"
+    text1.text("Wehbi Game Studio")
+    # Add the text object to the text list
+    text.append(text1)
+
+    # Create a Text object with a width of 29, height of 12, no font, and the red palette
+    text2 = stage.Text(
+        width=29, height=12, font=None, palette=constants.RED_PALETTE, buffer=None
+    )
+    # Move the text to the position (40, 110)
+    text2.move(40, 110)
+    # Set the text to "PRESS START"
+    text2.text("PRESS START")
+    # Add the text object to the text list
+    text.append(text2)
+
+    # Create the background grid using the image and set the size to 10x8 tiles
+    background = stage.Grid(
+        image_bank_background, constants.SCREEN_GRID_X, constants.SCREEN_GRID_Y
+    )
+
+    # Create a "Stage" object to manage the game graphics and input
+    # Set the frame rate to 60fps
+    game = stage.Stage(ugame.display, constants.FPS)
+
+    # Add the background and ship to the layers list
+    game.layers = text + [background]
+
+    # Draw the background on the screen
+    game.render_block()
+
+    # Game Loop to repeat forever
+    while True:
+        # Get user input
+        keys = ugame.buttons.get_pressed()
+
+        # Check if the "Start" button is pressed
+        if keys & ugame.K_START != 0:
+            game_scene()
+            # Perform action for "Start" button press
+
+        # Pause the loop to achieve 60fps frame rate
+        game.tick()
+
+
 def game_scene():
     # This function sets up and runs the main game scene.
 
@@ -27,9 +90,13 @@ def game_scene():
     select_button = constants.button_state["button_up"]
 
     # Get sound ready
+    # Open the "pew.wav" file for reading as binary data
     pew_sound = open("pew.wav", "rb")
+    # Access the audio module from the ugame library
     sound = ugame.audio
+    # Stop any currently playing sound
     sound.stop()
+    # Un-mute the sound
     sound.mute(False)
 
     # Create the background grid using the image and set the size to 10x8 tiles
@@ -53,7 +120,7 @@ def game_scene():
     # Set the frame rate to 60fps
     game = stage.Stage(ugame.display, constants.FPS)
 
-    # Add the background and ship to the layers list
+    # Add to the layers list
     game.layers = [ship] + [alien] + [background]
 
     # Draw the background on the screen
@@ -65,15 +132,19 @@ def game_scene():
         keys = ugame.buttons.get_pressed()
 
         # Check if the "A" button is pressed
-        # Perform action for "A" button press - fire missile and make sound
         if keys & ugame.K_X != 0:
+            # Check if the button was just pressed and update the button state
             if a_button == constants.button_state["button_up"]:
                 a_button = constants.button_state["button_just_pressed"]
+            # Check if the button is still pressed and update the button state
             elif a_button == constants.button_state["button_just_pressed"]:
                 a_button = constants.button_state["button_still_pressed"]
+        # If the button is not pressed
         else:
+            # Check if the button was just released and update the button state
             if a_button == constants.button_state["button_still_pressed"]:
                 a_button = constants.button_state["button_released"]
+            # Update the button state to "up"
             else:
                 a_button = constants.button_state["button_up"]
 
@@ -132,7 +203,7 @@ def game_scene():
                 # wrap it around to the top
                 ship.move(ship.x, 0)
 
-        # update game logic
+        # Update the game logic
         # Play sound if A button was just pressed
         if a_button == constants.button_state["button_just_pressed"]:
             sound.play(pew_sound)
@@ -145,4 +216,4 @@ def game_scene():
 
 
 if __name__ == "__main__":
-    game_scene()
+    menu_scene()
