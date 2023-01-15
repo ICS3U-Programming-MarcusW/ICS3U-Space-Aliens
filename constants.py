@@ -18,6 +18,30 @@ SPRITE_SIZE = 16
 # Define the total number of aliens in the game
 TOTAL_NUMBER_OF_ALIENS = 5
 
+# Define the total number of lasers in the game
+TOTAL_NUMBER_OF_LASERS = 5
+
+# Define the ship speed in the game
+SHIP_SPEED = 1
+
+# Define the alien speed in the game
+ALIEN_SPEED = 1
+
+# Define the laser speed in the game
+LASER_SPEED = 2
+
+# Define how far the lasers/aliens will be off the screen for x coordinate
+OFF_SCREEN_X = -100
+
+# Define how far the lasers/aliens will be off the screen for y coordinate
+OFF_SCREEN_Y = -100
+
+# Make sure the bottom of sprite is off screen from the top
+OFF_TOP_SCREEN = -1 * SPRITE_SIZE
+
+# Make sure sprite is off the screen from the bottom
+OFF_BOTTOM_SCREEN = SCREEN_Y + SPRITE_SIZE
+
 # Define the frames per second (FPS)
 FPS = 60
 
