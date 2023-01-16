@@ -155,6 +155,17 @@ def game_scene():
     # Add a score for our video game
     score = 0
 
+    # Create a text object to display the score
+    score_text = stage.Text(width=29, height=14)
+    # Clear the text object
+    score_text.clear()
+    # Set the cursor position to (0,0)
+    score_text.cursor(0, 0)
+    # Move the text to position (1,1)
+    score_text.move(1, 1)
+    # Update the text with the current score
+    score_text.text("Score: {0}".format(score))
+
     def show_alien():
         # This function takes an alien from off screen and moves it on screen.
         # It iterates through all the aliens in the "aliens" list,
@@ -250,7 +261,7 @@ def game_scene():
     game = stage.Stage(ugame.display, constants.FPS)
 
     # Add to the layers list
-    game.layers = lasers + [ship] + aliens + [background]
+    game.layers = [score_text] + lasers + [ship] + aliens + [background]
 
     # Draw the background on the screen
     game.render_block()
@@ -385,6 +396,16 @@ def game_scene():
                     )
                     # Call the show_alien function to place an alien back on the screen
                     show_alien()
+                    # Decrease the score for missing an alien
+                    score -= 1
+                    # Make sure the score never goes below 0
+                    if score < 0:
+                        score = 0
+                    # Clear the score and then reprint it
+                    score_text.clear()
+                    score_text.cursor(0, 0)
+                    score_text.move(1, 1)
+                    score_text.text("Score: {0}".format(score))
 
         # Iterate through the lasers
         for laser_number in range(len(lasers)):
@@ -423,6 +444,11 @@ def game_scene():
                             show_alien()
                             # Increase the score by 1
                             score = score + 1
+                            # Clear the score and then reprint it
+                            score_text.clear()
+                            score_text.cursor(0, 0)
+                            score_text.move(1, 1)
+                            score_text.text("Score: {0}".format(score))
 
         # Redraw the sprites on the screen
         game.render_sprites(aliens + lasers + [ship])
