@@ -7,12 +7,12 @@
 # and input for the game.
 
 
-import constants
-import stage
-import supervisor
+import random
 import time
 import ugame
-import random
+import constants
+import supervisor
+import stage
 
 
 def splash_scene():
