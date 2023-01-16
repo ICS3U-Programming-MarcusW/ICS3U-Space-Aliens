@@ -7,12 +7,12 @@
 # and input for the game.
 
 
+import constants
 import stage
 import ugame
 import time
 import random
-
-import constants
+import supervisor
 
 
 def splash_scene():
@@ -206,8 +206,18 @@ def game_scene():
     sound.mute(False)
 
     # Get boom sound ready
-    # Open the "pew.wav" file for reading as binary data
+    # Open the "boom.wav" file for reading as binary data
     boom_sound = open("boom.wav", "rb")
+    # Access the audio module from the ugame library
+    sound = ugame.audio
+    # Stop any currently playing sound
+    sound.stop()
+    # Un-mute the sound
+    sound.mute(False)
+
+    # Get crash sound ready
+    # Open the "crash.wav" file for reading as binary data
+    crash_sound = open("crash.wav", "rb")
     # Access the audio module from the ugame library
     sound = ugame.audio
     # Stop any currently playing sound
@@ -450,10 +460,103 @@ def game_scene():
                             score_text.move(1, 1)
                             score_text.text("Score: {0}".format(score))
 
+        # Check if any of the aliens on screen have collided with the ship
+        for alien_number in range(len(aliens)):
+            # Check if the x-coordinate of the alien is greater than 0, meaning it is on the screen
+            if aliens[alien_number].x > 0:
+                # Check for collision between the current alien and the ship using the `stage.collide` function
+                # This function takes the x and y coordinates of the bounding box of each object
+                # In this case, the bounding box of the alien is defined as x+1, y, x+15, y+15
+                # and the bounding box of the ship is defined as ship.x, ship.y, ship.x + 15, ship.y + 15
+                if stage.collide(
+                    aliens[alien_number].x + 1,
+                    aliens[alien_number].y,
+                    aliens[alien_number].x + 15,
+                    aliens[alien_number].y + 15,
+                    ship.x,
+                    ship.y,
+                    ship.x + 15,
+                    ship.y + 15,
+                ):
+                    # If collision is detected, stop any currently playing sound
+                    sound.stop()
+                    # Play the crash sound
+                    sound.play(crash_sound)
+                    # Wait for 3 seconds before moving on to the game over scene
+                    time.sleep(3.0)
+                    # Call the game over scene and pass in the current score
+                    game_over_scene(score)
+
         # Redraw the sprites on the screen
         game.render_sprites(aliens + lasers + [ship])
-
         # Pause the loop to achieve 60fps frame rate
+        game.tick()
+
+
+def game_over_scene(final_score):
+    # This function displays the game over scene with the final score and
+    # allows the user to restart the game by pressing the SELECT button.
+
+    # Load the image "mt_game_studio.bmp"
+    image_bank_2 = stage.Bank.from_bmp16("mt_game_studio.bmp")
+
+    # Create a background object using the image and dimensions from constants
+    background = stage.Grid(
+        image_bank_2, constants.SCREEN_GRID_X, constants.SCREEN_GRID_Y
+    )
+
+    # Create a list to store text objects
+    text = []
+
+    # Create a Text object with a width of 29, height of 14, no font, and the blue palette
+    text1 = stage.Text(
+        width=29, height=14, font=None, palette=constants.RED_PALETTE, buffer=None
+    )
+    # Move the text to the position (20, 20)
+    text1.move(20, 20)
+    # Set the text to the final score
+    text1.text("Final Score: {:0>2d}".format(final_score))
+    # Add the text object to the text list
+    text.append(text1)
+
+    # Create a Text object with a width of 29, height of 14, no font, and the blue palette
+    text2 = stage.Text(
+        width=29, height=14, font=None, palette=constants.RED_PALETTE, buffer=None
+    )
+    # Move the text to the position (43, 60)
+    text2.move(43, 60)
+    # Set the text to "GAME OVER"
+    text2.text("GAME OVER")
+    # Add the text object to the text list
+    text.append(text2)
+
+    # Create a Text object with a width of 29, height of 14, no font, and the blue palette
+    text3 = stage.Text(
+        width=29, height=14, font=None, palette=constants.RED_PALETTE, buffer=None
+    )
+    # Move the text to the position (32, 110)
+    text3.move(32, 110)
+    # Set the text to "PRESS SELECT"
+    text3.text("PRESS SELECT")
+    # Add the text object to the text list
+    text.append(text3)
+
+    # Create a "Stage" object to manage the game graphics and input
+    game = stage.Stage(ugame.display, constants.FPS)
+
+    # Add the background and text objects to the layers list
+    game.layers = text + [background]
+
+    # Draw the background and text on the screen
+    game.render_block()
+
+    while True:
+        # Check if the SELECT button is pressed
+        keys = ugame.buttons.get_pressed()
+        if keys & ugame.K_SELECT != 0:
+            # Reload the game if SELECT is pressed
+            supervisor.reload()
+
         game.tick()
 
 
