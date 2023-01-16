@@ -9,10 +9,10 @@
 
 import constants
 import stage
-import ugame
-import time
-import random
 import supervisor
+import time
+import ugame
+import random
 
 
 def splash_scene():
