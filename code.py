@@ -152,6 +152,9 @@ def menu_scene():
 def game_scene():
     # This function sets up and runs the main game scene.
 
+    # Add a score for our video game
+    score = 0
+
     def show_alien():
         # This function takes an alien from off screen and moves it on screen.
         # It iterates through all the aliens in the "aliens" list,
@@ -184,6 +187,16 @@ def game_scene():
     # Get sound ready
     # Open the "pew.wav" file for reading as binary data
     pew_sound = open("pew.wav", "rb")
+    # Access the audio module from the ugame library
+    sound = ugame.audio
+    # Stop any currently playing sound
+    sound.stop()
+    # Un-mute the sound
+    sound.mute(False)
+
+    # Get boom sound ready
+    # Open the "pew.wav" file for reading as binary data
+    boom_sound = open("boom.wav", "rb")
     # Access the audio module from the ugame library
     sound = ugame.audio
     # Stop any currently playing sound
@@ -373,8 +386,46 @@ def game_scene():
                     # Call the show_alien function to place an alien back on the screen
                     show_alien()
 
+        # Iterate through the lasers
+        for laser_number in range(len(lasers)):
+            # Check if the laser is on screen
+            if lasers[laser_number].x > 0:
+                # Iterate through the aliens
+                for alien_number in range(len(aliens)):
+                    # Check if the alien is on screen
+                    if aliens[alien_number].x > 0:
+                        # Check if the laser and alien have collided
+                        if stage.collide(
+                            lasers[laser_number].x + 6,
+                            lasers[laser_number].y + 2,
+                            lasers[laser_number].x + 11,
+                            lasers[laser_number].y + 12,
+                            aliens[alien_number].x + 1,
+                            aliens[alien_number].y,
+                            aliens[alien_number].x + 15,
+                            aliens[alien_number].y + 15,
+                        ):
+                            # You hit an alien
+                            # Move the alien off screen
+                            aliens[alien_number].move(
+                                constants.OFF_SCREEN_X, constants.OFF_SCREEN_Y
+                            )
+                            # Move the laser off screen
+                            lasers[laser_number].move(
+                                constants.OFF_SCREEN_X, constants.OFF_SCREEN_Y
+                            )
+                            # Stop any currently playing sound
+                            sound.stop()
+                            # Play the sound of the alien being hit
+                            sound.play(boom_sound)
+                            # Show two new aliens on the screen
+                            show_alien()
+                            show_alien()
+                            # Increase the score by 1
+                            score = score + 1
+
         # Redraw the sprites on the screen
-        game.render_sprites(lasers + [ship] + aliens)
+        game.render_sprites(aliens + lasers + [ship])
 
         # Pause the loop to achieve 60fps frame rate
         game.tick()
