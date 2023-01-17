@@ -92,6 +92,13 @@ def menu_scene():
     # Load the background and sprite image banks
     image_bank_mt_background = stage.Bank.from_bmp16("mt_game_studio.bmp")
 
+    menu_sound = open(".wav", "rb")
+    sound = ugame.audio
+    sound.stop()
+    sound.mute(False)
+
+    music_loop = 0
+
     # Add text objects
     text = []
     # Create a Text object with a width of 29, height of 12, no font, and the red palette
@@ -175,6 +182,13 @@ def menu_scene():
         # Pause the loop to achieve 60fps frame rate
         game.tick()
 
+        # play sound
+        if music_loop >= 1875.96000075:
+            sound.play(menu_sound)
+            music_loop = 0
+        else:
+            music_loop += 1
+
 
 def instructions_scene():
     # This function displays the game over scene with the final score and
@@ -219,7 +233,7 @@ def instructions_scene():
     # Add the text object to the text list
     text.append(text2)
 
-        # Create a Text object with a width of 29, height of 12, no font, and the red palette
+    # Create a Text object with a width of 29, height of 12, no font, and the red palette
     text3 = stage.Text(
         width=15,
         height=12,
@@ -230,7 +244,9 @@ def instructions_scene():
     # Move the text to the position (20, 10)
     text3.move(20, 40)
     # Set the text to "MT Game Studio"
-    text3.text(" - Use your water blaster to shoot the fire. Hit it, you get a point. It hits you, you lose a life.")
+    text3.text(
+        " - Use your water blaster to shoot the fire. Hit it, you get a point. It hits you, you lose a life."
+    )
     # Add the text object to the text list
     text.append(text3)
 
