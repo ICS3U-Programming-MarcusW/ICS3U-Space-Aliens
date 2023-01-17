@@ -7,12 +7,12 @@
 # and input for the game.
 
 
-import constants
 import random
-import stage
-import supervisor
 import time
+import constants
+import stage
 import ugame
+import supervisor
 
 
 def splash_scene():
@@ -111,14 +111,36 @@ def menu_scene():
 
     # Create a Text object with a width of 29, height of 12, no font, and the red palette
     text2 = stage.Text(
-        width=29, height=12, font=None, palette=constants.RED_PALETTE, buffer=None
+        width=11, height=10, font=None, palette=constants.RED_PALETTE, buffer=None
     )
     # Move the text to the position (40, 110)
     text2.move(40, 110)
     # Set the text to "PRESS START"
-    text2.text("PRESS START")
+    text2.text("PRESS START TO PLAY")
     # Add the text object to the text list
     text.append(text2)
+
+    # Add text to tell the user where to find the instructions page
+    text3 = stage.Text(
+        width=29, height=10, font=None, palette=constants.RED_PALETTE, buffer=None
+    )
+    # Move the text to the position (40, 110)
+    text3.move(40, 60)
+    # Set the text to "PRESS START"
+    text3.text("PRESS B FOR")
+    # Add the text object to the text list
+    text.append(text3)
+
+    # Add second part of instructions page
+    text4 = stage.Text(
+        width=29, height=10, font=None, palette=constants.RED_PALETTE, buffer=None
+    )
+    # Move the text to the position (40, 110)
+    text4.move(40, 68)
+    # Set the text to "PRESS START"
+    text4.text("INSTRUCTIONS")
+    # Add the text object to the text list
+    text.append(text4)
 
     # Create the background grid using the image and set the size to 10x8 tiles
     background = stage.Grid(
@@ -145,7 +167,89 @@ def menu_scene():
             game_scene()
             # Perform action for "Start" button press
 
+        # Check if the "B" button is pressed
+        if keys & ugame.K_O != 0:
+            instructions_scene()
+            # Perform action for "B" button press
+
         # Pause the loop to achieve 60fps frame rate
+        game.tick()
+
+
+def instructions_scene():
+    # This function displays the game over scene with the final score and
+    # allows the user to restart the game by pressing the SELECT button.
+
+    # Load the image "mt_game_studio.bmp"
+    image_bank_3 = stage.Bank.from_bmp16("mt_game_studio.bmp")
+
+    # Create a background object using the image and dimensions from constants
+    background = stage.Grid(
+        image_bank_3, constants.SCREEN_GRID_X, constants.SCREEN_GRID_Y
+    )
+
+    text = []
+    # Create a Text object with a width of 29, height of 12, no font, and the red palette
+    text1 = stage.Text(
+        width=15,
+        height=12,
+        font=None,
+        palette=constants.RED_PALETTE,
+        buffer=None,
+    )
+    # Move the text to the position (20, 10)
+    text1.move(20, 10)
+    # Set the text to "MT Game Studio"
+    text1.text("AQUA-KINGDOM : INSTRUCTIONS")
+    # Add the text object to the text list
+    text.append(text1)
+
+    # Create a Text object with a width of 29, height of 12, no font, and the red palette
+    text2 = stage.Text(
+        width=15,
+        height=12,
+        font=None,
+        palette=constants.RED_PALETTE,
+        buffer=None,
+    )
+    # Move the text to the position (20, 10)
+    text2.move(20, 30)
+    # Set the text to "MT Game Studio"
+    text2.text(" - Win by getting the highest score.")
+    # Add the text object to the text list
+    text.append(text2)
+
+        # Create a Text object with a width of 29, height of 12, no font, and the red palette
+    text3 = stage.Text(
+        width=15,
+        height=12,
+        font=None,
+        palette=constants.RED_PALETTE,
+        buffer=None,
+    )
+    # Move the text to the position (20, 10)
+    text3.move(20, 40)
+    # Set the text to "MT Game Studio"
+    text3.text(" - Use your water blaster to shoot the fire. Hit it, you get a point. It hits you, you lose a life.")
+    # Add the text object to the text list
+    text.append(text3)
+
+    # Create a "Stage" object to manage the game graphics and input
+    game = stage.Stage(ugame.display, constants.FPS)
+
+    # Add the background and text objects to the layers list
+    game.layers = text + [background]
+
+    # Draw the background and text on the screen
+    game.render_block()
+
+    while True:
+        # Check if the SELECT button is pressed
+        keys = ugame.buttons.get_pressed()
+        if keys & ugame.K_X != 0:
+            # Reload the game if SELECT is pressed
+            menu_scene()
+
         game.tick()
 
 
@@ -241,14 +345,14 @@ def game_scene():
 
     # Create the ship sprite using image at index 5, with initial position
     # (72,57)
-    ship = stage.Sprite(image_bank_sprites, 5, 72, 57)
+    ship = stage.Sprite(image_bank_sprites, 5, 72, 85)
 
     # Create a list of aliens
     aliens = []
     # Create new alien objects and append them to the list
     for alien_number in range(constants.TOTAL_NUMBER_OF_ALIENS):
         a_single_alien = stage.Sprite(
-            image_bank_sprites, 9, constants.OFF_SCREEN_X, constants.OFF_SCREEN_Y
+            image_bank_sprites, 15, constants.OFF_SCREEN_X, constants.OFF_SCREEN_Y
         )
         aliens.append(a_single_alien)
     # Place one alien on the screen, maybe using a function
@@ -261,7 +365,7 @@ def game_scene():
         # Create a new laser object using the image bank and initial position
         #  off screen
         a_single_laser = stage.Sprite(
-            image_bank_sprites, 10, constants.OFF_SCREEN_X, constants.OFF_SCREEN_Y
+            image_bank_sprites, 12, constants.OFF_SCREEN_X, constants.OFF_SCREEN_Y
         )
         # Append the laser object to the list of lasers
         lasers.append(a_single_laser)
@@ -427,12 +531,12 @@ def game_scene():
                     if aliens[alien_number].x > 0:
                         # Check if the laser and alien have collided
                         if stage.collide(
-                            lasers[laser_number].x + 6,
+                            lasers[laser_number].x + 4,
                             lasers[laser_number].y + 2,
                             lasers[laser_number].x + 11,
                             lasers[laser_number].y + 12,
-                            aliens[alien_number].x + 1,
-                            aliens[alien_number].y,
+                            aliens[alien_number].x,
+                            aliens[alien_number].y + 6,
                             aliens[alien_number].x + 15,
                             aliens[alien_number].y + 15,
                         ):
@@ -469,13 +573,13 @@ def game_scene():
                 # In this case, the bounding box of the alien is defined as x+1, y, x+15, y+15
                 # and the bounding box of the ship is defined as ship.x, ship.y, ship.x + 15, ship.y + 15
                 if stage.collide(
-                    aliens[alien_number].x + 1,
-                    aliens[alien_number].y,
+                    aliens[alien_number].x + 2,
+                    aliens[alien_number].y + 2,
                     aliens[alien_number].x + 15,
                     aliens[alien_number].y + 15,
-                    ship.x,
-                    ship.y,
-                    ship.x + 15,
+                    ship.x + 7,
+                    ship.y + 7,
+                    ship.x + 8,
                     ship.y + 15,
                 ):
                     # If collision is detected, stop any currently playing sound
