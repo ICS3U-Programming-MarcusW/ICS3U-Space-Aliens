@@ -2,17 +2,20 @@
 
 # Created by: Marcus Wehbi
 # Created on: January 2023
-# This constants file is for the Space Alien's game
+# This constants file is for the Aqua-Kingdom game
 
 # PyBadge screen size is 160x128 and sprites are 16x16
+# Set the length of the screen vertically and horizontally
 SCREEN_X = 160
 SCREEN_Y = 128
 
 # Define grid size for the screen
+# The screen is a 10x8 grid of 16x16 pixel sprites
 SCREEN_GRID_X = 10
 SCREEN_GRID_Y = 8
 
 # Define the size of the sprites
+# A sprite is 16 pixels by 16 pixels
 SPRITE_SIZE = 16
 
 # Define the total number of aliens in the game
@@ -36,10 +39,10 @@ OFF_SCREEN_X = -100
 # Define how far the lasers/aliens will be off the screen for y coordinate
 OFF_SCREEN_Y = -100
 
-# Make sure the bottom of sprite is off screen from the top
+# Make sure the bottom of sprite is off the screen from the top
 OFF_TOP_SCREEN = -1 * SPRITE_SIZE
 
-# Make sure sprite is off the screen from the bottom
+# Make sure the sprite is off the screen from the bottom
 OFF_BOTTOM_SCREEN = SCREEN_Y + SPRITE_SIZE
 
 # Define the frames per second (FPS)
